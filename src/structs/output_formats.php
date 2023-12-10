@@ -57,7 +57,7 @@ class ezcConsoleOutputFormats implements Iterator, Countable
      * 
      * @var array(ezcConsoleOutputFormat)
      */
-    protected $formats = array();
+    protected $formats = [];
 
     /**
      * Create a new ezcConsoleOutputFormats object.
@@ -70,10 +70,10 @@ class ezcConsoleOutputFormats implements Iterator, Countable
         $this->formats['default'] = new ezcConsoleOutputFormat();
         $this->formats['success'] = new ezcConsoleOutputFormat();
         $this->formats['success']->color = 'green';
-        $this->formats['success']->style = array( 'bold' );
+        $this->formats['success']->style = ['bold'];
         $this->formats['failure'] = new ezcConsoleOutputFormat();
         $this->formats['failure']->color = 'red';
-        $this->formats['failure']->style = array( 'bold' );
+        $this->formats['failure']->style = ['bold'];
     }
 
     /**

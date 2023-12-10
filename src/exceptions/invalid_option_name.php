@@ -39,9 +39,8 @@ class ezcConsoleInvalidOptionNameException extends ezcConsoleException
      * @param string $name The affected option name.
      * @return void
      */
-    public function __construct( $name )
+    public function __construct($name)
     {
-        parent::__construct( "The option name '{$name}' is invalid." );
     }
 }
 

@@ -51,11 +51,7 @@ class ezcConsoleMenuDialogDefaultValidator implements ezcConsoleMenuDialogValida
      * 
      * @var array
      */
-    protected $properties = array(
-        "elements"      => array(),
-        "default"       => null,
-        "conversion"    => self::CONVERT_NONE,
-    );
+    protected $properties = ["elements"      => [], "default"       => null, "conversion"    => self::CONVERT_NONE];
 
     /**
      * Creates a new menu default validator. 
@@ -72,7 +68,7 @@ class ezcConsoleMenuDialogDefaultValidator implements ezcConsoleMenuDialogValida
      * @param int $conversion The conversion to apply.
      * @return void
      */
-    public function __construct( array $elements = array(), $default = null, $conversion = self::CONVERT_NONE )
+    public function __construct( array $elements = [], mixed $default = null, $conversion = self::CONVERT_NONE )
     {
         $this->elements     = $elements;
         $this->default      = $default;
@@ -106,16 +102,11 @@ class ezcConsoleMenuDialogDefaultValidator implements ezcConsoleMenuDialogValida
             return $this->default;
 
         }
-        switch ( $this->conversion )
-        {
-            case self::CONVERT_LOWER:
-                return strtolower( $result );
-            case self::CONVERT_UPPER:
-                return strtoupper( $result );
-            case self::CONVERT_NONE:
-            default:
-                return $result;
-        }
+        return match ($this->conversion) {
+            self::CONVERT_LOWER => strtolower( (string) $result ),
+            self::CONVERT_UPPER => strtoupper( (string) $result ),
+            default => $result,
+        };
     }
 
     /**
@@ -171,7 +162,7 @@ class ezcConsoleMenuDialogDefaultValidator implements ezcConsoleMenuDialogValida
      *         If a the value for a property is out of range.
      * @ignore
      */
-    public function __set( $propertyName, $propertyValue )
+    public function __set( $propertyName, mixed $propertyValue )
     {
         switch ( $propertyName )
         {

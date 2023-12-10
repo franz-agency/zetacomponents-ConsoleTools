@@ -43,10 +43,7 @@ class ezcConsoleDialogOptions extends ezcBaseOptions
      * 
      * @var array(string=>mixed)
      */
-    protected $properties = array(
-        "format"    => "default",
-        "validator" => null
-    );
+    protected $properties = ["format"    => "default", "validator" => null];
 
     /**
      * Property write access.
@@ -60,7 +57,7 @@ class ezcConsoleDialogOptions extends ezcBaseOptions
      *         If the the desired property is not found.
      * @ignore
      */
-    public function __set( $propertyName, $propertyValue )
+    public function __set( $propertyName, mixed $propertyValue )
     {
         switch ( $propertyName )
         {

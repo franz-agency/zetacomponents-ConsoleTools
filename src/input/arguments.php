@@ -38,14 +38,14 @@ class ezcConsoleArguments implements ArrayAccess, Iterator, Countable
      * 
      * @var array(ezcConsoleArgument)
      */
-    protected $ordered = array();
+    protected $ordered = [];
 
     /**
      * Named list of arguments. 
      * 
      * @var array(string=>ezcConsoleArgument)
      */
-    protected $named = array();
+    protected $named = [];
 
     /**
      * Returns if the given offset exists.
@@ -61,17 +61,13 @@ class ezcConsoleArguments implements ArrayAccess, Iterator, Countable
      *         If the provided offset is neither an integer, nor a string.
      */
     #[ReturnTypeWillChange]
-    public function offsetExists( $offset )
+    public function offsetExists( mixed $offset )
     {
-        switch ( gettype( $offset ) )
-        {
-            case "string":
-                return array_key_exists( $offset, $this->named );
-            case "integer":
-                return array_key_exists( $offset, $this->ordered );
-            default:
-                throw new ezcBaseValueException( "offset", $offset, "string or int" );
-        }
+        return match (gettype( $offset )) {
+            "string" => array_key_exists( $offset, $this->named ),
+            "integer" => array_key_exists( $offset, $this->ordered ),
+            default => throw new ezcBaseValueException( "offset", $offset, "string or int" ),
+        };
     }
 
     /**

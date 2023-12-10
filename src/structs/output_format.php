@@ -97,12 +97,7 @@ class ezcConsoleOutputFormat
      *
      * @var array(string=>mixed)
      */
-    protected $properties = array( 
-        'color'     => 'default',
-        'style'     => array( 'default' ),
-        'bgcolor'   => 'default',
-        'target'    => ezcConsoleOutput::TARGET_OUTPUT,
-    );
+    protected $properties = ['color'     => 'default', 'style'     => ['default'], 'bgcolor'   => 'default', 'target'    => ezcConsoleOutput::TARGET_OUTPUT];
 
     /**
      * Create a new ezcConsoleOutputFormat object.
@@ -116,7 +111,7 @@ class ezcConsoleOutputFormat
     public function __construct( $color = 'default', array $style = null, $bgcolor = 'default', $target = ezcConsoleOutput::TARGET_OUTPUT )
     {
         $this->__set( 'color', $color );
-        $this->__set( 'style', isset( $style ) ? $style : array( 'default' ) );
+        $this->__set( 'style', $style ?? ['default'] );
         $this->__set( 'bgcolor', $bgcolor );
         $this->__set( 'target', $target );
     }
@@ -130,17 +125,11 @@ class ezcConsoleOutputFormat
      */
     public function __get( $propertyName )
     {
-        switch ( $propertyName )
-        {
-            case 'style':
-                return (array) $this->properties[$propertyName];
-            case 'color':
-            case 'bgcolor':
-            case 'target':
-                return $this->properties[$propertyName];
-            default:
-                throw new ezcBasePropertyNotFoundException( $propertyName );
-        }
+        return match ($propertyName) {
+            'style' => (array) $this->properties[$propertyName],
+            'color', 'bgcolor', 'target' => $this->properties[$propertyName],
+            default => throw new ezcBasePropertyNotFoundException( $propertyName ),
+        };
     }
 
     /**
@@ -165,7 +154,7 @@ class ezcConsoleOutputFormat
         // Extry handling of multi styles
         if ( $propertyName === 'style' )
         {
-            if ( !is_array( $val ) ) $val = array( $val );
+            if ( !is_array( $val ) ) $val = [$val];
             foreach ( $val as $style )
             {
                 if ( !ezcConsoleOutput::isValidFormatCode( $propertyName, $style ) )

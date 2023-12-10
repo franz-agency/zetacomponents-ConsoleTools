@@ -64,18 +64,7 @@
  */
 class ezcConsoleTableOptions extends ezcBaseOptions
 {
-    protected $properties = array(
-        'colWidth'            => 'auto',
-        'colWrap'             => ezcConsoleTable::WRAP_AUTO,
-        'defaultAlign'        => ezcConsoleTable::ALIGN_LEFT,
-        'colPadding'          => ' ',
-        'widthType'           => ezcConsoleTable::WIDTH_MAX,
-        'lineVertical'        => '-',
-        'lineHorizontal'      => '|',
-        'corner'              => '+',
-        'defaultFormat'       => 'default',
-        'defaultBorderFormat' => 'default',
-    );
+    protected $properties = ['colWidth'            => 'auto', 'colWrap'             => ezcConsoleTable::WRAP_AUTO, 'defaultAlign'        => ezcConsoleTable::ALIGN_LEFT, 'colPadding'          => ' ', 'widthType'           => ezcConsoleTable::WIDTH_MAX, 'lineVertical'        => '-', 'lineHorizontal'      => '|', 'corner'              => '+', 'defaultFormat'       => 'default', 'defaultBorderFormat' => 'default'];
 
     /**
      * Construct a new options object.
@@ -151,7 +140,7 @@ class ezcConsoleTableOptions extends ezcBaseOptions
      * @param mixed $val  The value for the property.
      * @ignore
      */
-    public function __set( $propertyName, $val )
+    public function __set( $propertyName, mixed $val )
     {
         switch ( $propertyName )
         {

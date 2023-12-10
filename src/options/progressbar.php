@@ -65,20 +65,7 @@
 class ezcConsoleProgressbarOptions extends ezcBaseOptions
 {
 
-    protected $properties = array(
-        'barChar'         => "+",
-        'emptyChar'       => "-",
-        'formatString'    => "%act% / %max% [%bar%] %fraction%%",
-        'fractionFormat'  => "%01.2f",
-        'progressChar'    => ">",
-        'redrawFrequency' => 1,
-        'step'            => 1,
-        'width'           => 78,
-        'actFormat'       => '%.0f',
-        'maxFormat'       => '%.0f',
-        'minVerbosity'    => 1,
-        'maxVerbosity'    => false,
-    );
+    protected $properties = ['barChar'         => "+", 'emptyChar'       => "-", 'formatString'    => "%act% / %max% [%bar%] %fraction%%", 'fractionFormat'  => "%01.2f", 'progressChar'    => ">", 'redrawFrequency' => 1, 'step'            => 1, 'width'           => 78, 'actFormat'       => '%.0f', 'maxFormat'       => '%.0f', 'minVerbosity'    => 1, 'maxVerbosity'    => false];
 
     /**
      * Option write access.
@@ -92,7 +79,7 @@ class ezcConsoleProgressbarOptions extends ezcBaseOptions
      * @param mixed $value  The value for the property.
      * @ignore
      */
-    public function __set( $key, $value )
+    public function __set( $key, mixed $value )
     {
         switch ( $key )
         {

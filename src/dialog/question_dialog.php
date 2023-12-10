@@ -57,10 +57,7 @@ class ezcConsoleQuestionDialog implements ezcConsoleDialog
      * 
      * @var array
      */
-    protected $properties = array(
-        "options"   => null,
-        "output"    => null,
-    );
+    protected $properties = ["options"   => null, "output"    => null];
 
     /**
      * Creates a new question dialog.
@@ -75,7 +72,7 @@ class ezcConsoleQuestionDialog implements ezcConsoleDialog
     public function __construct( ezcConsoleOutput $output, ezcConsoleQuestionDialogOptions $options = null )
     {
         $this->output  = $output;
-        $this->options = $options === null ? new ezcConsoleQuestionDialogOptions() : $options;
+        $this->options = $options ?? new ezcConsoleQuestionDialogOptions();
     }
 
     /**
@@ -178,13 +175,10 @@ class ezcConsoleQuestionDialog implements ezcConsoleDialog
         $opts->text = $questionString;
         $opts->showResults = true;
         $opts->validator = new ezcConsoleQuestionDialogMappingValidator(
-            array( "y", "n" ),
+            ["y", "n"],
             $default,
             ezcConsoleQuestionDialogCollectionValidator::CONVERT_LOWER,
-            array(
-                'yes' => 'y',
-                'no'  => 'n',
-            )
+            ['yes' => 'y', 'no'  => 'n']
         );
 
         return new ezcConsoleQuestionDialog( $out, $opts );
@@ -221,7 +215,7 @@ class ezcConsoleQuestionDialog implements ezcConsoleDialog
      *         If the the desired property is not found.
      * @ignore
      */
-    public function __set( $propertyName, $propertyValue )
+    public function __set( $propertyName, mixed $propertyValue )
     {
         switch ( $propertyName )
         {
@@ -230,7 +224,7 @@ class ezcConsoleQuestionDialog implements ezcConsoleDialog
                 {
                     throw new ezcBaseValueException(
                         $propertyName,
-                        ( is_object( $propertyValue ) ? get_class( $propertyValue ) : gettype( $propertyValue ) ),
+                        ( get_debug_type($propertyValue) ),
                         "instance of ezcConsoleQuestionDialogOptions"
                     );
                 }
@@ -240,7 +234,7 @@ class ezcConsoleQuestionDialog implements ezcConsoleDialog
                 {
                     throw new ezcBaseValueException(
                         $propertyName,
-                        ( is_object( $propertyValue ) ? get_class( $propertyValue ) : gettype( $propertyValue ) ),
+                        ( get_debug_type($propertyValue) ),
                         "instance of ezcConsoleOutput"
                     );
                 }

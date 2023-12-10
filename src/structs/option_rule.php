@@ -49,11 +49,7 @@ class ezcConsoleOptionRule
      *
      * @var array
      */
-    protected $properties = array( 
-        'option' => null,
-        'values' => array(),
-        'ifSet'  => true
-    );
+    protected $properties = ['option' => null, 'values' => [], 'ifSet'  => true];
 
     /**
      * Creates a new option rule.
@@ -87,7 +83,7 @@ class ezcConsoleOptionRule
      * @param mixed $values            The affected values.
      * @param bool $ifSet
      */
-    public function __construct( ezcConsoleOption $option, array $values = array(), $ifSet = true )
+    public function __construct( ezcConsoleOption $option, array $values = [], $ifSet = true )
     {
         $this->__set( 'option', $option );
         $this->__set( 'values', $values );
@@ -104,18 +100,14 @@ class ezcConsoleOptionRule
      * @return mixed Value of the property or null.
      * @ignore
      */
-    public function __get( $propertyName ) 
+    public function __get($propertyName)
     {
-        switch ( $propertyName )
-        {
-            case 'option':
-                return $this->properties['option'];
-            case 'values':
-                return $this->properties['values'];
-            case 'ifSet':
-                return $this->properties['ifSet'];
-        }
-        throw new ezcBasePropertyNotFoundException( $propertyName );
+        return match ($propertyName) {
+            'option' => $this->properties['option'],
+            'values' => $this->properties['values'],
+            'ifSet' => $this->properties['ifSet'],
+            default => throw new ezcBasePropertyNotFoundException( $propertyName ),
+        };
     }
     
     /**
@@ -130,7 +122,7 @@ class ezcConsoleOptionRule
      *         If the the desired property is not found.
      * @ignore
      */
-    public function __set( $propertyName, $propertyValue ) 
+    public function __set( $propertyName, mixed $propertyValue ) 
     {
         switch ( $propertyName )
         {
@@ -166,16 +158,12 @@ class ezcConsoleOptionRule
      * @return bool If the property exists or not.
      * @ignore
      */
-    public function __isset( $propertyName )
+    public function __isset($propertyName)
     {
-        switch ( $propertyName )
-        {
-            case 'option':
-            case 'values':
-            case 'ifSet':
-                return true;
-        }
-        return false;
+        return match ($propertyName) {
+            'option', 'values', 'ifSet' => true,
+            default => false,
+        };
     }
 
 }

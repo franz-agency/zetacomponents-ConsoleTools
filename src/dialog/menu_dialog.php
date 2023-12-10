@@ -51,10 +51,7 @@ class ezcConsoleMenuDialog implements ezcConsoleDialog
      * 
      * @var array
      */
-    protected $properties = array(
-        "options"   => null,
-        "output"    => null,
-    );
+    protected $properties = ["options"   => null, "output"    => null];
 
     /**
      * Creates a new menu dialog.
@@ -69,7 +66,7 @@ class ezcConsoleMenuDialog implements ezcConsoleDialog
     public function __construct( ezcConsoleOutput $output, ezcConsoleMenuDialogOptions $options = null )
     {
         $this->output  = $output;
-        $this->options = $options === null ? new ezcConsoleMenuDialogOptions() : $options;
+        $this->options = $options ?? new ezcConsoleMenuDialogOptions();
     }
 
     /**
@@ -187,7 +184,7 @@ class ezcConsoleMenuDialog implements ezcConsoleDialog
      *         If the the desired property is not found.
      * @ignore
      */
-    public function __set( $propertyName, $propertyValue )
+    public function __set( $propertyName, mixed $propertyValue )
     {
         switch ( $propertyName )
         {
@@ -196,7 +193,7 @@ class ezcConsoleMenuDialog implements ezcConsoleDialog
                 {
                     throw new ezcBaseValueException(
                         $propertyName,
-                        ( is_object( $propertyValue ) ? get_class( $propertyValue ) : gettype( $propertyValue ) ),
+                        ( get_debug_type($propertyValue) ),
                         "instance of ezcConsoleMenuDialogOptions"
                     );
                 }
@@ -206,7 +203,7 @@ class ezcConsoleMenuDialog implements ezcConsoleDialog
                 {
                     throw new ezcBaseValueException(
                         $propertyName,
-                        ( is_object( $propertyValue ) ? get_class( $propertyValue ) : gettype( $propertyValue ) ),
+                        ( get_debug_type($propertyValue) ),
                         "instance of ezcConsoleOutput"
                     );
                 }

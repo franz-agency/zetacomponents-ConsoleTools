@@ -47,10 +47,7 @@ class ezcConsoleQuestionDialogRegexValidator implements ezcConsoleQuestionDialog
      * 
      * @var array(string=>mixed)
      */
-    protected $properties = array(
-        "pattern" => null,
-        "default" => null,
-    );
+    protected $properties = ["pattern" => null, "default" => null];
 
     /**
      * Create a new question dialog regex validator.
@@ -64,7 +61,7 @@ class ezcConsoleQuestionDialogRegexValidator implements ezcConsoleQuestionDialog
      * @param mixed $default  Default value.
      * @return void
      */
-    public function __construct( $pattern, $default = null )
+    public function __construct( $pattern, mixed $default = null )
     {
         $this->pattern = $pattern;
         $this->default = $default;
@@ -83,7 +80,7 @@ class ezcConsoleQuestionDialogRegexValidator implements ezcConsoleQuestionDialog
         {
             return $this->default !== null;
         }
-        return preg_match( $this->pattern, $result ) > 0;
+        return preg_match( $this->pattern, (string) $result ) > 0;
     }
 
     /**
@@ -147,7 +144,7 @@ class ezcConsoleQuestionDialogRegexValidator implements ezcConsoleQuestionDialog
      *         If a the value for a property is out of range.
      * @ignore
      */
-    public function __set( $propertyName, $propertyValue )
+    public function __set( $propertyName, mixed $propertyValue )
     {
         switch ( $propertyName )
         {

@@ -186,14 +186,10 @@ class ezcConsoleStringTool
 
         $padding = str_repeat( $padString, $fullStrRepeats ) . $partlyPad;
 
-        switch ( $padType )
-        {
-            case STR_PAD_LEFT:
-                return $padding . $input;
-            case STR_PAD_RIGHT:
-            default:
-                return $input . $padding;
-        }
+        return match ($padType) {
+            STR_PAD_LEFT => $padding . $input,
+            default => $input . $padding,
+        };
     }
 }
 

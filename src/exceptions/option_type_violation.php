@@ -40,7 +40,7 @@ class ezcConsoleOptionTypeViolationException extends ezcConsoleOptionException
      * @param mixed $value             The violating value            The violating value..
      * @return void
      */
-    public function __construct( ezcConsoleOption $option, $value )
+    public function __construct( ezcConsoleOption $option, mixed $value )
     {
         $typeName = 'unknown';
         switch ( $option->type )
@@ -52,7 +52,6 @@ class ezcConsoleOptionTypeViolationException extends ezcConsoleOptionException
                 $typeName = 'int';
                 break;
         }
-        parent::__construct( "The option '{$option->long}' expects a value of type '{$typeName}', but received the value '{$value}'." );
     }
 }
 ?>

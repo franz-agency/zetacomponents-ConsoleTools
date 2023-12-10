@@ -84,7 +84,7 @@ class ezcConsoleStandardInputValidator implements ezcConsoleInputValidator
     private function validateDependencies( ezcConsoleOption $option )
     {
         $optSet = ( $option->value !== false
-            && ( !is_array( $option->value ) || $option->value !== array() ) );
+            && ( !is_array( $option->value ) || $option->value !== [] ) );
 
         foreach ( $option->getDependencies() as $dep )
         {
@@ -100,14 +100,12 @@ class ezcConsoleStandardInputValidator implements ezcConsoleInputValidator
      *
      * Validates the dependency $dep, which is set in the $srcOpt.
      *
-     * @param ezcConsoleOption $srcOpt
-     * @param ezcConsoleOptionRule $dep
      */
     private function validateDependency( ezcConsoleOption $srcOpt, ezcConsoleOptionRule $dep )
     {
         $optValue = $dep->option->value;
 
-        if ( $optValue === false || $optValue === array() )
+        if ( $optValue === false || $optValue === [] )
         {
             throw new ezcConsoleOptionDependencyViolationException(
                 $srcOpt,
@@ -115,11 +113,11 @@ class ezcConsoleStandardInputValidator implements ezcConsoleInputValidator
             );
         }
 
-        if ( $dep->values !== array() )
+        if ( $dep->values !== [] )
         {
-            $optVals = ( is_array( $optValue ) ? $optValue : array( $optValue) );
+            $optVals = ( is_array( $optValue ) ? $optValue : [$optValue] );
             $unrecognizedVals = array_diff( $optVals, $dep->values );
-            if ( $unrecognizedVals !== array() )
+            if ( $unrecognizedVals !== [] )
             {
                 throw new ezcConsoleOptionDependencyViolationException(
                     $srcOpt,
@@ -140,7 +138,7 @@ class ezcConsoleStandardInputValidator implements ezcConsoleInputValidator
     private function validateExclusions( ezcConsoleOption $option )
     {
         $optSet = ( $option->value !== false
-            && ( !is_array( $option->value ) || $option->value !== array() ) );
+            && ( !is_array( $option->value ) || $option->value !== [] ) );
 
         foreach ( $option->getExclusions() as $excl )
         {
@@ -156,14 +154,12 @@ class ezcConsoleStandardInputValidator implements ezcConsoleInputValidator
      *
      * Validates the exclusion $excl, which is set in the $srcOpt.
      *
-     * @param ezcConsoleOption $srcOpt
-     * @param ezcConsoleOptionRule $excl
      */
     private function validateExclusion( ezcConsoleOption $srcOpt, ezcConsoleOptionRule $excl )
     {
         $optValue = $excl->option->value;
 
-        if ( $optValue !== false && $optValue !== array() && $excl->values === array() )
+        if ( $optValue !== false && $optValue !== [] && $excl->values === [] )
         {
             throw new ezcConsoleOptionExclusionViolationException(
                 $srcOpt,
@@ -171,9 +167,9 @@ class ezcConsoleStandardInputValidator implements ezcConsoleInputValidator
             );
         }
 
-        $optVals = ( is_array( $optValue ) ? $optValue : array( $optValue ) );
+        $optVals = ( is_array( $optValue ) ? $optValue : [$optValue] );
         $forbiddenVals = array_intersect( $optVals, $excl->values );
-        if ( $forbiddenVals !== array() )
+        if ( $forbiddenVals !== [] )
         {
             throw new ezcConsoleOptionExclusionViolationException(
                 $srcOpt,

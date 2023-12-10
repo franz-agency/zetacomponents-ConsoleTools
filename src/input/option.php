@@ -91,7 +91,7 @@ class ezcConsoleOption
      *
      * @var array(string=>ezcConsoleParamemterRule)
      */
-    protected $dependencies = array();
+    protected $dependencies = [];
 
     /**
      * Exclusion rules of this parameter.
@@ -104,7 +104,7 @@ class ezcConsoleOption
      *
      * @var array(string=>ezcConsoleParamemterRule)
      */
-    protected $exclusions = array();
+    protected $exclusions = [];
 
     /**
      * The value the parameter was assigned to when being submitted.
@@ -166,12 +166,12 @@ class ezcConsoleOption
         $short = '',
         $long = '',
         $type = ezcConsoleInput::TYPE_NONE,
-        $default = null,
+        mixed $default = null,
         $multiple = false,
         $shorthelp = 'No help available.',
         $longhelp = 'Sorry, there is no help text available for this parameter.',
-        array $dependencies = array(),
-        array $exclusions = array(),
+        array $dependencies = [],
+        array $exclusions = [],
         $arguments = true,
         $mandatory = false,
         $isHelpOption = false
@@ -193,26 +193,26 @@ class ezcConsoleOption
         }
         $this->properties['long'] = $long;
 
-        $this->__set( "type",      $type         !== null ? $type      : ezcConsoleInput::TYPE_NONE  );
-        $this->__set( "multiple",  $multiple     !== null ? $multiple  : false  );
-        $this->__set( "default",   $default      !== null ? $default   : null );
-        $this->__set( "shorthelp", $shorthelp    !== null ? $shorthelp : 'No help available.' );
-        $this->__set( "longhelp",  $longhelp     !== null ? $longhelp  : 'Sorry, there is no help text available for this parameter.' );
+        $this->__set( "type",      $type ?? ezcConsoleInput::TYPE_NONE  );
+        $this->__set( "multiple",  $multiple ?? false  );
+        $this->__set( "default",   $default ?? null );
+        $this->__set( "shorthelp", $shorthelp ?? 'No help available.' );
+        $this->__set( "longhelp",  $longhelp ?? 'Sorry, there is no help text available for this parameter.' );
 
-        $dependencies    = $dependencies !== null && is_array( $dependencies ) ? $dependencies : array();
+        $dependencies    = $dependencies !== null && is_array( $dependencies ) ? $dependencies : [];
         foreach ( $dependencies as $dep )
         {
             $this->addDependency( $dep );
         }
 
-        $exclusions = $exclusions !== null && is_array( $exclusions ) ? $exclusions : array();
+        $exclusions = $exclusions !== null && is_array( $exclusions ) ? $exclusions : [];
         foreach ( $exclusions as $exc )
         {
             $this->addExclusion( $exc );
         }
 
-        $this->__set( "mandatory",    $mandatory !== null ? $mandatory : false );
-        $this->__set( "isHelpOption", $isHelpOption !== null ? $isHelpOption : false );
+        $this->__set( "mandatory",    $mandatory ?? false );
+        $this->__set( "isHelpOption", $isHelpOption ?? false );
     }
 
     /**
@@ -323,7 +323,7 @@ class ezcConsoleOption
      */
     public function resetDependencies()
     {
-        $this->dependencies = array();
+        $this->dependencies = [];
     }
 
     /**
@@ -434,7 +434,7 @@ class ezcConsoleOption
      */
     public function resetExclusions()
     {
-        $this->exclusions = array();
+        $this->exclusions = [];
     }
 
     /**
@@ -447,23 +447,10 @@ class ezcConsoleOption
      */
     public function __get( $key )
     {
-        switch ( $key  )
-        {
-            case 'short':
-            case 'long':
-            case 'type':
-            case 'default':
-            case 'multiple':
-            case 'shorthelp':
-            case 'longhelp':
-            case 'arguments':
-            case 'isHelpOption':
-            case 'mandatory':
-                return $this->properties[$key];
-            case 'dependencies':
-            default:
-                throw new ezcBasePropertyNotFoundException( $key );
-        }
+        return match ($key) {
+            'short', 'long', 'type', 'default', 'multiple', 'shorthelp', 'longhelp', 'arguments', 'isHelpOption', 'mandatory' => $this->properties[$key],
+            default => throw new ezcBasePropertyNotFoundException( $key ),
+        };
     }
 
     /**
@@ -478,7 +465,7 @@ class ezcConsoleOption
      *         If the the desired property is not found.
      * @ignore
      */
-    public function __set( $key, $val )
+    public function __set( $key, mixed $val )
     {
         switch ( $key )
         {
@@ -559,23 +546,12 @@ class ezcConsoleOption
      * @return bool True is the property is set, otherwise false.
      * @ignore
      */
-    public function __isset( $key )
+    public function __isset($key)
     {
-        switch ( $key  )
-        {
-            case 'short':
-            case 'long':
-            case 'type':
-            case 'default':
-            case 'multiple':
-            case 'shorthelp':
-            case 'longhelp':
-            case 'arguments':
-            case 'isHelpOption':
-            case 'mandatory':
-                return ( $this->properties[$key] !== null );
-        }
-        return false;
+        return match ($key) {
+            'short', 'long', 'type', 'default', 'multiple', 'shorthelp', 'longhelp', 'arguments', 'isHelpOption', 'mandatory' => $this->properties[$key] !== null,
+            default => false,
+        };
     }
 
     /**
@@ -590,7 +566,7 @@ class ezcConsoleOption
      */
     public static function validateOptionName( $name )
     {
-        if ( substr( $name, 0, 1 ) === '-' || strpos( $name, ' ' ) !== false )
+        if ( str_starts_with($name, '-') || str_contains( $name, ' ' ) )
         {
             return false;
         }
