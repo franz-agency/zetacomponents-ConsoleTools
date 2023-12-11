@@ -41,7 +41,7 @@ class ezcConsoleOptionDependencyViolationException extends ezcConsoleOptionExcep
      * @param mixed $valueRange                 The dependend value range.
      * @return void
      */
-    public function __construct( ezcConsoleOption $dependingOption, ezcConsoleOption $dependantOption, mixed $valueRange = null )
+    public function __construct( ezcConsoleOption $dependingOption, ezcConsoleOption $dependantOption, $valueRange = null )
     {
         $message  = "The option '{$dependingOption->long}' depends on the option '{$dependantOption->long}' ";
         if ( $valueRange !== null )
@@ -49,6 +49,7 @@ class ezcConsoleOptionDependencyViolationException extends ezcConsoleOptionExcep
             $message .= "to have a value in '{$valueRange}' ";
         }
         $message .= "but this one was not submitted.";
+        parent::__construct( $message );
     }
 }
 ?>

@@ -39,7 +39,10 @@
  */
 class ezcConsoleStatusbarOptions extends ezcBaseOptions
 {
-    protected $properties = ['successChar' => "+", 'failureChar' => "-"];
+    protected $properties = array(
+        'successChar' => "+",
+        'failureChar' => "-",
+    );
 
     /**
      * Option write access.
@@ -53,7 +56,7 @@ class ezcConsoleStatusbarOptions extends ezcBaseOptions
      * @param mixed $value  The value for the property.
      * @ignore
      */
-    public function __set( $key, mixed $value )
+    public function __set( $key, $value )
     {
         switch ( $key )
         {

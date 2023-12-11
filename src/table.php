@@ -90,52 +90,52 @@
  * @version //autogen//
  * @mainclass
  */
-class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
+class ezcConsoleTable implements Countable, Iterator, ArrayAccess
 {
     /**
      * Automatically wrap text to fit into a column.
      * @see ezcConsoleTable::$options
      */
-    final public const WRAP_AUTO = 1;
+    const WRAP_AUTO = 1;
 
     /**
      * Do not wrap text. Columns will be extended to fit the largest text.
      * ATTENTION: This is risky!
      * @see ezcConsoleTable::$options
      */
-    final public const WRAP_NONE = 2;
+    const WRAP_NONE = 2;
 
     /**
      * Text will be cut to fit into a column.
      * @see ezcConsoleTable::$options
      */
-    final public const WRAP_CUT  = 3;
+    const WRAP_CUT  = 3;
 
     /**
      * Align text in the default direction.
      */
-    final public const ALIGN_DEFAULT = -1;
+    const ALIGN_DEFAULT = -1;
     /**
      * Align text in cells to the right.
      */
-    final public const ALIGN_LEFT   = STR_PAD_RIGHT;
+    const ALIGN_LEFT   = STR_PAD_RIGHT;
     /**
      * Align text in cells to the left.
      */
-    final public const ALIGN_RIGHT  = STR_PAD_LEFT;
+    const ALIGN_RIGHT  = STR_PAD_LEFT;
     /**
      * Align text in cells to the center.
      */
-    final public const ALIGN_CENTER = STR_PAD_BOTH;
+    const ALIGN_CENTER = STR_PAD_BOTH;
 
     /**
      * The width given by settings must be used even if the data allows it smaller.
      */
-    final public const WIDTH_FIXED = 1;
+    const WIDTH_FIXED = 1;
     /**
      * The width given by settings is a maximum value, if data allows it, the table gets smaller.
      */
-    final public const WIDTH_MAX = 2;
+    const WIDTH_MAX = 2;
 
     /**
      * Container to hold the properties
@@ -161,8 +161,9 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
     /**
      * Tool object for multi-byte encoding safe string operations.
      *
+     * @var ezcConsoleStringTool
      */
-    private readonly \ezcConsoleStringTool $stringTool;
+    private $stringTool;
 
     /**
      * Creates a new table.
@@ -175,9 +176,9 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
      *
      * @throws ezcBaseValueException On an invalid setting.
      */
-    public function __construct( ezcConsoleOutput $outHandler, $width, $options = [] )
+    public function __construct( ezcConsoleOutput $outHandler, $width, $options = array() )
     {
-        $this->rows = [];
+        $this->rows = array();
         $this->outputHandler = $outHandler;
         $this->stringTool = new ezcConsoleStringTool();
 
@@ -210,7 +211,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
      *         If you submit neither an array nor an instance of
      *         ezcConsoleTableOptions.
      */
-    public function setOptions( $options = [] )
+    public function setOptions( $options = array() )
     {
         if ( is_array( $options ) )
         {
@@ -271,7 +272,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
      *
      * @return string
      */
-    public function __toString(): string
+    public function __toString()
     {
         return implode( PHP_EOL, $this->generateTable() );
     }
@@ -315,7 +316,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
     #[ReturnTypeWillChange]
     public function offsetGet( $offset )
     {
-        $offset ??= count( $this->rows );
+        $offset = ( $offset === null ) ? count( $this->rows ) : $offset;
         if ( !is_int( $offset ) || $offset < 0  )
         {
             throw new ezcBaseValueException( 'offset', $offset, 'int >= 0 or null' );
@@ -502,7 +503,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
      *         If a the value for a property is out of range.
      * @ignore
      */
-    public function __set( $key, mixed $val )
+    public function __set( $key, $val )
     {
         switch ( $key )
         {
@@ -533,12 +534,16 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
      * @return bool True is the property is set, otherwise false.
      * @ignore
      */
-    public function __isset($key)
+    public function __isset( $key )
     {
-        return match ($key) {
-            'options', 'width', 'cols' => true,
-            default => false,
-        };
+        switch ( $key )
+        {
+            case 'options':
+            case 'width':
+            case 'cols':
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -549,7 +554,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
     private function generateTable()
     {
         $colWidth = $this->getColWidths();
-        $table = [];
+        $table = array();
 
         if ( $this->options->lineVertical !== null )
         {
@@ -597,9 +602,9 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
         {
             $border .= ( $this->options->lineHorizontal !== null ? $this->properties['options']->corner : '' )
                     . str_repeat(
-                        (string) $this->properties['options']->lineVertical,
+                        $this->properties['options']->lineVertical,
                         $width + (
-                            2 * iconv_strlen( (string) $this->properties['options']->colPadding, 'UTF-8' )
+                            2 * iconv_strlen( $this->properties['options']->colPadding, 'UTF-8' )
                         )
             );
         }
@@ -626,7 +631,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
             $format = $this->determineFormat( $row, $cell );
             $borderFormat = $this->determineBorderFormat( $row );
 
-            $data = $cells[$cell] ?? '';
+            $data = isset( $cells[$cell] ) ? $cells[$cell] : '';
             $rowData .= $this->formatText(
                             $this->properties['options']->lineHorizontal,
                             $borderFormat
@@ -712,7 +717,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
      */
     private function breakRows( $cells, $colWidth )
     {
-        $rows = [];
+        $rows = array();
         // Iterate through cells of the row
         foreach ( $colWidth as $cell => $width )
         {
@@ -720,7 +725,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
             // Physical row id, start with 0 for each row
             $row = 0;
             // Split into multiple physical rows if manual breaks exist
-            $dataLines = explode( "\n", (string) $data );
+            $dataLines = explode( "\n", $data );
             foreach ( $dataLines as $dataLine )
             {
                 // Does the physical row fit?
@@ -777,7 +782,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
 
         if ( $colCount === 0 )
         {
-            return [$this->width];
+            return array( $this->width );
         }
 
         $borderWidth = 0;
@@ -794,7 +799,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
             - (
                 // Per column: 2 * border padding + 1 border
                 $colCount * (
-                    2 * iconv_strlen( (string) $this->properties['options']->colPadding, 'UTF-8' )
+                    2 * iconv_strlen( $this->properties['options']->colPadding, 'UTF-8' )
                     + $borderWidth
                 )
               // 1 Additional border
@@ -802,7 +807,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
 
         // Width of a column if each is made equal
         $colNormWidth = round( $globalWidth / $colCount );
-        $colMaxWidth = [];
+        $colMaxWidth = array();
 
         // Determine the longest data for each column
         foreach ( $this->rows as $row => $cells )
@@ -810,7 +815,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
             foreach ( $cells as $col => $cell )
             {
                 $contentLength = 0;
-                foreach ( explode( PHP_EOL, (string) $cell->content ) as $contentRow )
+                foreach ( explode( PHP_EOL, $cell->content ) as $contentRow )
                 {
                     $contentLength = max(
                         $contentLength,
@@ -820,8 +825,8 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess, \Stringable
                 $colMaxWidth[$col] = isset( $colMaxWidth[$col] ) ? max( $colMaxWidth[$col], $contentLength ) : $contentLength;
             }
         }
-        $colWidth = [];
-        $colWidthOverflow = [];
+        $colWidth = array();
+        $colWidthOverflow = array();
         $spareWidth = 0;
 
         // Make columns best fit

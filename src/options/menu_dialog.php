@@ -58,12 +58,13 @@ class ezcConsoleMenuDialogOptions extends ezcConsoleDialogOptions
      *         If the value for a property is out of range.
      * @param array(string=>mixed) $options The initial options to set.
      */
-    public function __construct( array $options = [] )
+    public function __construct( array $options = array() )
     {
         $this->properties["text"]           = "Please choose an item.";
         $this->properties["formatString"]   = "%3s) %s\n";
         $this->properties["selectText"]     = "Select: ";
         $this->properties["validator"]      = new ezcConsoleMenuDialogDefaultValidator();
+        parent::__construct( $options );
     }
 
     /**

@@ -39,20 +39,22 @@
 class ezcConsoleInputStandardHelpGenerator implements ezcConsoleInputHelpGenerator
 {
     /**
+     * Input object. 
+     * 
+     * @var ezcConsoleInput
+     */
+    private $input;
+
+    /**
      * Creates a new help generator.
      *
      * Creates a new help generator for the given $input.
      * 
      * @param ezcConsoleInput $input
      */
-    public function __construct(
-        /**
-         * Input object.
-         *
-         */
-        private readonly ezcConsoleInput $input
-    )
+    public function __construct( ezcConsoleInput $input )
     {
+        $this->input = $input;
     }
 
     /**
@@ -101,7 +103,7 @@ class ezcConsoleInputStandardHelpGenerator implements ezcConsoleInputHelpGenerat
      */
     public function generateUngroupedOptionHelp( $long = false, array $optionsFilter = null )
     {
-        $help = [];
+        $help = array();
         foreach ( $this->input->getOptions() as $id => $param )
         {
             if ( $optionsFilter === null || in_array( $param->short, $optionsFilter ) || in_array( $param->long, $optionsFilter ) )
@@ -159,7 +161,7 @@ class ezcConsoleInputStandardHelpGenerator implements ezcConsoleInputHelpGenerat
      */
     public function generateGroupedOptionHelp( array $groups, $long = false, array $optionsFilter = null )
     {
-        $help = [];
+        $help = array();
         foreach ( $groups as $groupName => $groupOptions )
         {
             foreach ( $groupOptions as $optionName )
@@ -207,7 +209,7 @@ class ezcConsoleInputStandardHelpGenerator implements ezcConsoleInputHelpGenerat
      */
     public function generateArgumentHelp( $long = false )
     {
-        $help = [];
+        $help = array();
         if ( $this->input->argumentDefinition !== null )
         {
             foreach ( $this->input->argumentDefinition as $arg )
@@ -224,33 +226,40 @@ class ezcConsoleInputStandardHelpGenerator implements ezcConsoleInputHelpGenerat
                 }
                 $argSynopsis = sprintf( $argSynopsis, $type, $arg->name );
                 $help[] = ( $long === true )
-                        ? [$argSynopsis, $arg->longhelp . ( $arg->mandatory === false 
-                                           ? ' (optional' . ( $arg->default !== null 
-                                                              ? ', default = ' . ( is_array( $arg->default ) 
-                                                                                   ? "'" . implode( "' '", $arg->default ) . "'" 
-                                                                                   : "'$arg->default'" 
-                                                                                 )
-                                                              : '' 
-                                                            ) . ')'
-                                           : ''
-                                         )]
-                        : [$argSynopsis, $arg->shorthelp];
+                        ? array( 
+                            $argSynopsis,
+                            $arg->longhelp . ( $arg->mandatory === false 
+                                               ? ' (optional' . ( $arg->default !== null 
+                                                                  ? ', default = ' . ( is_array( $arg->default ) 
+                                                                                       ? "'" . implode( "' '", $arg->default ) . "'" 
+                                                                                       : "'$arg->default'" 
+                                                                                     )
+                                                                  : '' 
+                                                                ) . ')'
+                                               : ''
+                                             )
+                          )
+                        : array( $argSynopsis, $arg->shorthelp );
             }
         }
         return $help;
     }
 
     /**
-     * Creates 1 text row for displaying options help.
+     * Creates 1 text row for displaying options help. 
      *
      * Returns a single array entry for the {@link getOptionHelpRow()} method.
      *
-     * @param bool $long
+     * @param bool $long 
+     * @param ezcConsoleOption $param
      * @return string
      */
     private function getOptionHelpRow( $long, ezcConsoleOption $param )
     {
-        return [( $param->short !== "" ? '-' . $param->short . ' / ' : "" ) . '--' . $param->long, $long == false ? $param->shorthelp : $param->longhelp];
+        return array( 
+            ( $param->short !== "" ? '-' . $param->short . ' / ' : "" ) . '--' . $param->long,
+            $long == false ? $param->shorthelp : $param->longhelp,
+        );
     }
 
     /**
@@ -266,7 +275,7 @@ class ezcConsoleInputStandardHelpGenerator implements ezcConsoleInputHelpGenerat
      */
     public function generateSynopsis( array $optionFilter = null )
     {
-        $usedOptions = ['short' => [], 'long' => []];
+        $usedOptions = array( 'short' => array(), 'long' => array() );
         $allowsArgs = true;
         $synopsis = '$ ' . ( isset( $argv ) && sizeof( $argv ) > 0 ? $argv[0] : $_SERVER['argv'][0] ) . ' ';
         foreach ( $this->input->getOptions() as $option )
@@ -365,7 +374,7 @@ class ezcConsoleInputStandardHelpGenerator implements ezcConsoleInputHelpGenerat
     private function createArgumentsSynopsis()
     {
         $mandatory = true;
-        $synopsises = [];
+        $synopsises = array();
         foreach ( $this->input->argumentDefinition as $arg )
         {
             $argSynopsis = "";

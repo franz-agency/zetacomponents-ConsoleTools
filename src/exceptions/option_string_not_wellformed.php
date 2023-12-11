@@ -38,8 +38,9 @@ class ezcConsoleOptionStringNotWellformedException extends ezcConsoleException
      * @param string $reason The reason for that the string was invalid.
      * @return void
      */
-    public function __construct($reason)
+    public function __construct( $reason )
     {
+        parent::__construct( "The provided option defintion string was not well formed. " . $reason );
     }
 }
 

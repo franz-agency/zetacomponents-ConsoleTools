@@ -39,8 +39,9 @@ class ezcConsoleOptionNotExistsException extends ezcConsoleOptionException
      * @param string $name Name of the already existing option.
      * @return void
      */
-    public function __construct($name)
+    public function __construct( $name )
     {
+        parent::__construct( "The referenced parameter '{$name}' is not registered." );
     }
 }
 ?>

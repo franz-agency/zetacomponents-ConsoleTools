@@ -35,17 +35,17 @@ interface ezcConsoleDialogValidator
     /**
      * Perform no conversion on the result. 
      */
-    public const CONVERT_NONE  = 0;
+    const CONVERT_NONE  = 0;
 
     /**
      * Convert result to lower-case. 
      */
-    public const CONVERT_LOWER = 1;
+    const CONVERT_LOWER = 1;
 
     /**
      * Convert result to upper-case. 
      */
-    public const CONVERT_UPPER = 2;
+    const CONVERT_UPPER = 2;
 
     /**
      * Returns if the given result is valid. 
@@ -53,7 +53,7 @@ interface ezcConsoleDialogValidator
      * @param mixed $result The received result.
      * @return bool If the result is valid.
      */
-    public function validate( mixed $result );
+    public function validate( $result );
 
     /**
      * Returns a fixed version of the result, if possible.
@@ -66,7 +66,7 @@ interface ezcConsoleDialogValidator
      * @param mixed $result The received result.
      * @return mixed The manipulated result.
      */
-    public function fixup( mixed $result );
+    public function fixup( $result );
 
 }
 

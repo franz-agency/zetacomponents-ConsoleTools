@@ -53,7 +53,16 @@ class ezcConsoleArgument
      * 
      * @var array
      */
-    protected $properties = ["name"      => null, "type"      => ezcConsoleInput::TYPE_STRING, "shorthelp" => "No help available.", "longhelp"  => "There is no help for this argument available.", "mandatory" => true, "multiple"  => false, "default"   => null, "value"     => null];
+    protected $properties = array(
+        "name"      => null,
+        "type"      => ezcConsoleInput::TYPE_STRING,
+        "shorthelp" => "No help available.",
+        "longhelp"  => "There is no help for this argument available.",
+        "mandatory" => true,
+        "multiple"  => false,
+        "default"   => null,
+        "value"     => null,
+    );
 
     /**
      * Creates a new console argument object.
@@ -82,7 +91,7 @@ class ezcConsoleArgument
         $longhelp  = "There is no help for this argument available.",
         $mandatory = true,
         $multiple  = false,
-        mixed $default   = null
+        $default   = null
     )
     {
         if ( !is_string( $name ) || strlen( $name ) < 1 )

@@ -67,7 +67,7 @@ class ezcConsoleTableCell
      * @param mixed $align    Alignment of the content in the cell.
      * @return void
      */
-    public function __construct( $content = '', $format = 'default', mixed $align = ezcConsoleTable::ALIGN_DEFAULT )
+    public function __construct( $content = '', $format = 'default', $align = ezcConsoleTable::ALIGN_DEFAULT )
     {
         $this->__set( 'content', $content );
         $this->__set( 'format', $format );
@@ -108,7 +108,7 @@ class ezcConsoleTableCell
      *
      * @ignore
      */
-    public function __set( $key, mixed $val )
+    public function __set( $key, $val )
     {
             
         switch ( $key )

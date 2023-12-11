@@ -100,7 +100,7 @@ class ezcConsoleOutputOptions extends ezcBaseOptions
      * @param mixed $val  The value for the property.
      * @ignore
      */
-    public function __set( $propertyName, mixed $val )
+    public function __set( $propertyName, $val )
     {
         switch ( $propertyName )
         {

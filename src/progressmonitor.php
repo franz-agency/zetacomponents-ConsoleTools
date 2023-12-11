@@ -73,6 +73,13 @@ class ezcConsoleProgressMonitor
     protected $counter = 0;
 
     /**
+     * The number of entries to expect. 
+     * 
+     * @var int
+     */
+    protected $max;
+
+    /**
      * Creates a new progress monitor.
      * The $outputHandler parameter will be used to display the progress
      * monitor. $max is the number of monitor items to expect. $options can be
@@ -85,13 +92,10 @@ class ezcConsoleProgressMonitor
      *
      * @see ezcConsoleProgressMonitor::$options
      */
-    public function __construct( ezcConsoleOutput $outHandler, /**
-     * The number of entries to expect.
-     *
-     */
-    protected $max, array $options = [] )
+    public function __construct( ezcConsoleOutput $outHandler, $max, array $options = array() )
     {
         $this->outputHandler = $outHandler;
+        $this->max = $max;
         $this->options = new ezcConsoleProgressMonitorOptions( $options );
     }
 
@@ -104,12 +108,15 @@ class ezcConsoleProgressMonitor
      * @throws ezcBasePropertyNotFoundException
      *         If the the desired property is not found.
      */
-    public function __get($key)
+    public function __get( $key )
     {
-        return match ($key) {
-            'options' => $this->options,
-            default => throw new ezcBasePropertyNotFoundException( $key ),
-        };
+        switch ( $key )
+        {
+            case 'options':
+                return $this->options;
+                break;
+        }
+        throw new ezcBasePropertyNotFoundException( $key );
     }
     
     /**
@@ -123,7 +130,7 @@ class ezcConsoleProgressMonitor
      *         ezcConsoleProgressMonitorOptions. 
      * @return void
      */
-    public function __set( $propertyName, mixed $val )
+    public function __set( $propertyName, $val )
     {
         switch ( $propertyName ) 
         {
@@ -145,12 +152,14 @@ class ezcConsoleProgressMonitor
      * @param string $propertyName Name of the property.
      * @return bool True is the property is set, otherwise false.
      */
-    public function __isset($propertyName)
+    public function __isset( $propertyName )
     {
-        return match ($propertyName) {
-            'options' => true,
-            default => false,
-        };
+        switch ( $propertyName )
+        {
+            case 'options':
+                return true;
+        }
+        return false;
     }
 
     /**

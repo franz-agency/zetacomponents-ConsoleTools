@@ -50,7 +50,11 @@ class ezcConsoleQuestionDialogCollectionValidator implements ezcConsoleQuestionD
      * 
      * @var array
      */
-    protected $properties  = ["collection"    => [], "default"       => null, "conversion"    => self::CONVERT_NONE];
+    protected $properties  = array(
+        "collection"    => array(),
+        "default"       => null,
+        "conversion"    => self::CONVERT_NONE,
+    );
 
     /**
      * Creates a new question dialog collection validator. 
@@ -99,11 +103,15 @@ class ezcConsoleQuestionDialogCollectionValidator implements ezcConsoleQuestionD
         {
             return $this->default;
         }
-        return match ($this->conversion) {
-            self::CONVERT_UPPER => strtoupper( (string) $result ),
-            self::CONVERT_LOWER => strtolower( (string) $result ),
-            default => $result,
-        };
+        switch ( $this->conversion )
+        {
+            case self::CONVERT_UPPER:
+                return strtoupper( $result );
+            case self::CONVERT_LOWER:
+                return strtolower( $result );
+            default:
+                return $result;
+        }
     }
 
     /**

@@ -44,7 +44,8 @@ interface ezcConsoleInputHelpGenerator
      * Creates a new help generator.
      *
      * Creates a new help generator for the given $input.
-     *
+     * 
+     * @param ezcConsoleInput $input
      */
     public function __construct( ezcConsoleInput $input );
 

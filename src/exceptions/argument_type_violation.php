@@ -40,7 +40,7 @@ class ezcConsoleArgumentTypeViolationException extends ezcConsoleArgumentExcepti
      * @param mixed $value            The incorrect value.
      * @return void
      */
-    public function __construct( ezcConsoleArgument $arg, mixed $value )
+    public function __construct( ezcConsoleArgument $arg, $value )
     {
         $typeName = 'unknown';
         switch ( $arg->type )
@@ -49,6 +49,7 @@ class ezcConsoleArgumentTypeViolationException extends ezcConsoleArgumentExcepti
                 $typeName = 'int';
                 break;
         }
+        parent::__construct( "The argument '{$arg->name}' expects a value of type '{$typeName}', but received the value '{$value}'." );
     }
 }
 

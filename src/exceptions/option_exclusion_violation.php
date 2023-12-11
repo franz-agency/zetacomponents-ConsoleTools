@@ -41,7 +41,7 @@ class ezcConsoleOptionExclusionViolationException extends ezcConsoleOptionExcept
      * @param mixed $valueRange                 The excluded value range.
      * @return void
      */
-    public function __construct( ezcConsoleOption $excludingOption, ezcConsoleOption $excludedOption, mixed $valueRange = null )
+    public function __construct( ezcConsoleOption $excludingOption, ezcConsoleOption $excludedOption, $valueRange = null )
     {
         $message = "The option '{$excludingOption->long}' excludes the option '{$excludedOption->long}'";
         if ( $valueRange !== null )
@@ -49,6 +49,7 @@ class ezcConsoleOptionExclusionViolationException extends ezcConsoleOptionExcept
             $message .= " to have a value in '{$valueRange}'";
         }
         $message .= " but this one was submitted.";
+        parent::__construct( $message );
     }
 }
 ?>

@@ -86,7 +86,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess
      * 
      * @var array(ezcConsoleTableCell)
      */
-    protected $cells = [];
+    protected $cells = array();
 
     /**
      * Create a new ezcConsoleProgressbarRow. 
@@ -345,7 +345,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess
      *
      * @ignore
      */
-    public function __set( $key, mixed $val )
+    public function __set( $key, $val )
     {
             
         switch ( $key )
@@ -382,10 +382,15 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess
      */
     public function __isset( $key )
     {
-        return match ($key) {
-            'format', 'borderFormat', 'align' => true,
-            default => false,
-        };
+        switch ( $key )
+        {
+            case 'format':
+            case 'borderFormat':
+            case 'align':
+                return true;
+            default:
+                return false;
+        }
     }
 
 }

@@ -129,17 +129,17 @@ class ezcConsoleInput
     /**
      * Option does not carry a value.
      */
-    final public const TYPE_NONE     = 1;
+    const TYPE_NONE     = 1;
 
     /**
      * Option takes an integer value.
      */
-    final public const TYPE_INT      = 2;
+    const TYPE_INT      = 2;
 
     /**
      * Option takes a string value.
      */
-    final public const TYPE_STRING   = 3;
+    const TYPE_STRING   = 3;
 
     /**
      * Array of option definitions, indexed by number.
@@ -154,7 +154,7 @@ class ezcConsoleInput
      *
      * @var array(array)
      */
-    private array $options = [];
+    private $options = array();
 
     /**
      * Short option names.
@@ -163,7 +163,7 @@ class ezcConsoleInput
      *
      * @var array(string=>int)
      */
-    private array $optionShort = [];
+    private $optionShort = array();
 
     /**
      * Long option names.
@@ -172,53 +172,56 @@ class ezcConsoleInput
      *
      * @var array(string=>int)
      */
-    private array $optionLong = [];
+    private $optionLong = array();
 
     /**
      * Arguments, if submitted, are stored here.
      *
      * @var array(string)
      */
-    private $arguments = [];
+    private $arguments = array();
 
     /**
      * Wether the process() method has already been called.
      *
+     * @var bool
      */
-    private bool $processed = false;
+    private $processed = false;
 
     /**
      * Indicates if an option was submitted, that has the isHelpOption flag set.
      *
+     * @var bool
      */
-    private bool $helpOptionSet = false;
+    private $helpOptionSet = false;
 
     /**
      * Tool object for multi-byte encoding safe string operations.
      *
+     * @var ezcConsoleStringTool
      */
-    private readonly \ezcConsoleStringTool $stringTool;
+    private $stringTool;
 
     /**
      * Input validator.
      *
      * @var ezcConsoleInputValidator
      */
-    private readonly \ezcConsoleStandardInputValidator $validator;
+    private $validator;
 
     /**
      * Help generator.
      *
      * @var ezcConsoleInputHelpGenerator
      */
-    private readonly \ezcConsoleInputStandardHelpGenerator $helpGenerator;
+    private $helpGenerator;
 
     /**
      * Collection of properties.
      *
      * @var array(string=>mixed)
      */
-    protected $properties = [];
+    protected $properties = array();
 
     /**
      * Creates an input handler.
@@ -242,6 +245,7 @@ class ezcConsoleInput
      *
      * @see ezcConsoleInput::unregisterOption()
      *
+     * @param ezcConsoleOption $option
      *
      * @return ezcConsoleOption The recently registered option.
      */
@@ -284,6 +288,7 @@ class ezcConsoleInput
      *
      * @param string $short
      * @param string $long
+     * @param ezcConsoleOption $option
      *
      *
      * @throws ezcConsoleOptionNotExistsException
@@ -526,7 +531,7 @@ class ezcConsoleInput
 
         if ( !isset( $args ) )
         {
-            $args = $_SERVER['argv'] ?? [];
+            $args = isset( $_SERVER['argv'] ) ? $_SERVER['argv'] : array();
         }
 
         $nextIndex = $this->processOptions( $args );
@@ -554,7 +559,7 @@ class ezcConsoleInput
     {
         foreach ( $this->options as $option )
         {
-            if ( $option->value === false || $option->value === [] )
+            if ( $option->value === false || $option->value === array() )
             {
                 // Default value to set?
                 if ( $option->default !== null )
@@ -596,7 +601,7 @@ class ezcConsoleInput
             }
 
             // Equalize parameter handling (long params with =)
-            if ( iconv_substr( (string) $args[$i], 0, 2, 'UTF-8' ) == '--' )
+            if ( iconv_substr( $args[$i], 0, 2, 'UTF-8' ) == '--' )
             {
                 $this->preprocessLongOption( $args, $i );
                 // Update number of args, changed by preprocessLongOption()
@@ -604,9 +609,9 @@ class ezcConsoleInput
             }
 
             // Check for parameter
-            if ( iconv_substr( (string) $args[$i], 0, 1, 'UTF-8' ) === '-' )
+            if ( iconv_substr( $args[$i], 0, 1, 'UTF-8' ) === '-' )
             {
-                if ( !$this->hasOption( preg_replace( '/^-*/', '', (string) $args[$i] ) ) )
+                if ( !$this->hasOption( preg_replace( '/^-*/', '', $args[$i] ) ) )
                 {
                     throw new ezcConsoleOptionNotExistsException( $args[$i] );
                 }
@@ -646,7 +651,7 @@ class ezcConsoleInput
                 $argument->value = null;
             }
         }
-        $this->arguments = [];
+        $this->arguments = array();
     }
 
     /**
@@ -663,7 +668,7 @@ class ezcConsoleInput
         {
             $param = $this->getOption( $name );
         }
-        catch ( ezcConsoleOptionNotExistsException )
+        catch ( ezcConsoleOptionNotExistsException $e )
         {
             return false;
         }
@@ -703,7 +708,7 @@ class ezcConsoleInput
      */
     public function getOptionValues( $longnames = false )
     {
-        $res = [];
+        $res = array();
         foreach ( $this->options as $param )
         {
             if ( $param->value !== false )
@@ -782,12 +787,12 @@ class ezcConsoleInput
      *            to null instead of an empty array. Giving an empty array for
      *            these will then be taken literally.
      */
-    public function getHelp( $long = false, array $params = [], array $paramGrouping = null )
+    public function getHelp( $long = false, array $params = array(), array $paramGrouping = null )
     {
         // New handling
-        $params = ( $params === [] || $params === null ? null : $params );
+        $params = ( $params === array() || $params === null ? null : $params );
 
-        $help = [];
+        $help = array();
         if ( $paramGrouping === null )
         {
             // Original handling
@@ -800,12 +805,12 @@ class ezcConsoleInput
 
         if ( $this->argumentDefinition !== null )
         {
-            $help[] = ["Arguments:", ''];
+            $help[] = array( "Arguments:", '' );
 
             $argumentsHelp = $this->helpGenerator->generateArgumentHelp( $long );
-            if ( $argumentsHelp === [] )
+            if ( $argumentsHelp === array() )
             {
-                $help[] = ['', "No arguments available."];
+                $help[] = array( '', "No arguments available." );
             }
             else
             {
@@ -837,9 +842,12 @@ class ezcConsoleInput
     /**
      * Generates options helo array with ordering and grouping.
      *
+     * @param mixed $long
+     * @param mixed $params
+     * @param mixed $paramGrouping
      * @return array()
      */
-    private function getOptionHelpWithGrouping( mixed $long, mixed $params, mixed $paramGrouping )
+    private function getOptionHelpWithGrouping( $long, $params, $paramGrouping )
     {
         $rawHelp = $this->helpGenerator->generateGroupedOptionHelp(
             $paramGrouping,
@@ -847,20 +855,20 @@ class ezcConsoleInput
             $params
         );
 
-        $help  = [];
+        $help  = array();
         $first = true;
         foreach ( $rawHelp as $category => $optionsHelp )
         {
             if ( !$first )
             {
-                $help[] = ['', ''];
+                $help[] = array( '', '' );
             }
             else
             {
                 $first = false;
             }
 
-            $help[] = [$category, ''];
+            $help[] = array( $category, '' );
             $help = array_merge( $help, $optionsHelp );
         }
         return $help;
@@ -903,7 +911,7 @@ class ezcConsoleInput
      * @param array(string=>array(string)) $paramGrouping
      * @return ezcConsoleTable           The filled table.
      */
-    public function getHelpTable( ezcConsoleTable $table, $long = false, array $params = [], $paramGrouping = null )
+    public function getHelpTable( ezcConsoleTable $table, $long = false, array $params = array(), $paramGrouping = null )
     {
         $help = $this->getHelp( $long, $params, $paramGrouping );
         $i = 0;
@@ -957,13 +965,13 @@ class ezcConsoleInput
      */
     public function getHelpText( $programDesc, $width = 80, $long = false, array $params = null, $paramGrouping = null )
     {
-        $help = $this->getHelp( $long, ( $params == null ? [] : $params ), $paramGrouping );
+        $help = $this->getHelp( $long, ( $params == null ? array() : $params ), $paramGrouping );
 
         // Determine max length of first column text.
         $maxLength = 0;
         foreach ( $help as $row )
         {
-            $maxLength = max( $maxLength, iconv_strlen( (string) $row[0], 'UTF-8' ) );
+            $maxLength = max( $maxLength, iconv_strlen( $row[0], 'UTF-8' ) );
         }
 
         // Width of left column
@@ -1168,7 +1176,7 @@ class ezcConsoleInput
      */
     private function processOption( array $args, &$i )
     {
-        $option = $this->getOption( preg_replace( '/^-+/', '', (string) $args[$i++] ) );
+        $option = $this->getOption( preg_replace( '/^-+/', '', $args[$i++] ) );
 
         // Is the actual option a help option?
         if ( $option->isHelpOption === true )
@@ -1179,7 +1187,7 @@ class ezcConsoleInput
         if ( $option->type === ezcConsoleInput::TYPE_NONE )
         {
             // No value expected
-            if ( isset( $args[$i] ) && iconv_substr( (string) $args[$i], 0, 1, 'UTF-8' ) !== '-' && sizeof( $args ) > ( $i + 1 ) )
+            if ( isset( $args[$i] ) && iconv_substr( $args[$i], 0, 1, 'UTF-8' ) !== '-' && sizeof( $args ) > ( $i + 1 ) )
             {
                 // But one found
                 throw new ezcConsoleOptionTypeViolationException( $option, $args[$i] );
@@ -1189,7 +1197,7 @@ class ezcConsoleInput
             {
                 if ( ! is_array( $option->value ) )
                 {
-                    $option->value = [];
+                    $option->value = array();
                 }
                 $option->value[] = true;
             }
@@ -1201,7 +1209,7 @@ class ezcConsoleInput
             return $i;
         }
         // Value expected, check for it
-        if ( isset( $args[$i] ) && iconv_substr( (string) $args[$i], 0, 1, 'UTF-8' ) !== '-' )
+        if ( isset( $args[$i] ) && iconv_substr( $args[$i], 0, 1, 'UTF-8' ) !== '-' )
         {
             // Type check
             if ( $this->isCorrectType( $option->type, $args[$i] ) === false )
@@ -1213,7 +1221,7 @@ class ezcConsoleInput
             {
                 if ( ! is_array( $option->value ) )
                 {
-                    $option->value = [];
+                    $option->value = array();
                 }
                 $option->value[] = $args[$i];
             }
@@ -1285,14 +1293,14 @@ class ezcConsoleInput
 
                 if ( $arg->multiple === true )
                 {
-                    $arg->value = [];
+                    $arg->value = array();
                     for ( $i = $i; $i < $numArgs; ++$i )
                     {
                         if ( $this->isCorrectType( $arg->type, $args[$i] ) === false )
                         {
                             throw new ezcConsoleArgumentTypeViolationException( $arg, $args[$i] );
                         }
-                        $arg->value = array_merge( $arg->value, [$args[$i]] );
+                        $arg->value = array_merge( $arg->value, array( $args[$i] ) );
                         // Keep old handling, too
                         $this->arguments[] = $args[$i];
                     }
@@ -1354,7 +1362,7 @@ class ezcConsoleInput
         }
         $this->validator->validateOptions(
             $this->options,
-            ( $this->arguments !== [] )
+            ( $this->arguments !== array() )
         );
     }
 
@@ -1400,10 +1408,10 @@ class ezcConsoleInput
     private function preprocessLongOption( array &$args, $i )
     {
         // Value given?
-        if ( preg_match( '/^--\w+\=[^ ]/i', (string) $args[$i] ) )
+        if ( preg_match( '/^--\w+\=[^ ]/i', $args[$i] ) )
         {
             // Split param and value and replace current param
-            $parts = explode( '=', (string) $args[$i], 2 );
+            $parts = explode( '=', $args[$i], 2 );
             array_splice( $args, $i, 1, $parts );
         }
     }

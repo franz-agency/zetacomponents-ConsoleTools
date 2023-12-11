@@ -44,27 +44,30 @@ class ezcConsoleQuestionDialogTypeValidator implements ezcConsoleQuestionDialogV
     /**
      * Data type string. 
      */
-    final public const TYPE_STRING = 0;
+    const TYPE_STRING = 0;
     /**
      * Data type int. 
      */
-    final public const TYPE_INT    = 1;
+    const TYPE_INT    = 1;
     /**
      * Data type float. 
      */
-    final public const TYPE_FLOAT  = 2;
+    const TYPE_FLOAT  = 2;
     /**
      * Data type bool. 
      * The results 1 and "true" will be cased to true, 0 and "false" to false.
      */
-    final public const TYPE_BOOL   = 3;
+    const TYPE_BOOL   = 3;
 
     /**
      * Properties.
      * 
      * @var array
      */
-    protected $properties = ["type"      => self::TYPE_STRING, "default"   => null];
+    protected $properties = array(
+        "type"      => self::TYPE_STRING,
+        "default"   => null,
+    );
 
     /**
      * Creates a new question dialog type validator.
@@ -77,7 +80,7 @@ class ezcConsoleQuestionDialogTypeValidator implements ezcConsoleQuestionDialogV
      * @param mixed $default Default value according to $type.
      * @return void
      */
-    public function __construct( $type = self::TYPE_STRING, mixed $default = null )
+    public function __construct( $type = self::TYPE_STRING, $default = null )
     {
         $this->type = $type;
         $this->default = $default;
@@ -96,12 +99,18 @@ class ezcConsoleQuestionDialogTypeValidator implements ezcConsoleQuestionDialogV
         {
             return $this->default !== null;
         }
-        return match ($this->type) {
-            self::TYPE_INT => is_int( $result ),
-            self::TYPE_FLOAT => is_float( $result ),
-            self::TYPE_BOOL => is_bool( $result ),
-            default => is_string( $result ),
-        };
+        switch ( $this->type )
+        {
+            case self::TYPE_INT:
+                return is_int( $result );
+            case self::TYPE_FLOAT:
+                return is_float( $result );
+            case self::TYPE_BOOL:
+                return is_bool( $result );
+            case self::TYPE_STRING:
+            default:
+                return is_string( $result );
+        }
     }
 
     /**
@@ -121,9 +130,9 @@ class ezcConsoleQuestionDialogTypeValidator implements ezcConsoleQuestionDialogV
         switch ( $this->type )
         {
             case self::TYPE_INT:
-                return ( preg_match( "/^[0-9\-]+$/", (string) $result ) !== 0 ) ? (int) $result : $result;
+                return ( preg_match( "/^[0-9\-]+$/", $result ) !== 0 ) ? (int) $result : $result;
             case self::TYPE_FLOAT:
-                return ( preg_match( "/^[0-9.E\-]+$/i", (string) $result ) !== 0 ) ? (float) $result : $result;
+                return ( preg_match( "/^[0-9.E\-]+$/i", $result ) !== 0 ) ? (float) $result : $result;
             case self::TYPE_BOOL:
                 switch ( $result )
                 {
@@ -151,12 +160,18 @@ class ezcConsoleQuestionDialogTypeValidator implements ezcConsoleQuestionDialogV
     public function getResultString()
     {
         $res = "(<%s>)" . ( $this->default !== null ? " [{$this->default}]" : "" );
-        return match ($this->type) {
-            self::TYPE_INT => sprintf( $res, "int" ),
-            self::TYPE_FLOAT => sprintf( $res, "float" ),
-            self::TYPE_BOOL => sprintf( $res, "bool" ),
-            default => sprintf( $res, "string" ),
-        };
+        switch ( $this->type )
+        {
+            case self::TYPE_INT:
+                return sprintf( $res, "int" );
+            case self::TYPE_FLOAT:
+                return sprintf( $res, "float" );
+            case self::TYPE_BOOL:
+                return sprintf( $res, "bool" );
+            case self::TYPE_STRING:
+            default:
+                return sprintf( $res, "string" );
+        }
     }
     
     /**
@@ -190,7 +205,7 @@ class ezcConsoleQuestionDialogTypeValidator implements ezcConsoleQuestionDialogV
      *         If a the value for a property is out of range.
      * @ignore
      */
-    public function __set( $propertyName, mixed $propertyValue )
+    public function __set( $propertyName, $propertyValue )
     {
         switch ( $propertyName )
         {

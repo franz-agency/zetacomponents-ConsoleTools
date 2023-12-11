@@ -37,7 +37,9 @@
  */
 class ezcConsoleProgressMonitorOptions extends ezcBaseOptions
 {
-    protected $properties = ['formatString' => '%8.1f%% %s %s'];
+    protected $properties = array(
+        'formatString' => '%8.1f%% %s %s',
+    );
 
     /**
      * Option write access.
@@ -51,7 +53,7 @@ class ezcConsoleProgressMonitorOptions extends ezcBaseOptions
      * @param mixed $value  The value for the property.
      * @ignore
      */
-    public function __set( $key, mixed $value )
+    public function __set( $key, $value )
     {
         switch ( $key )
         {

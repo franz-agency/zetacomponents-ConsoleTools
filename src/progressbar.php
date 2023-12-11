@@ -79,7 +79,12 @@ class ezcConsoleProgressbar
      * 
      * @var array(string=>string)
      */
-    protected $valueMap = ['bar'       => '', 'fraction'  => '', 'act'       => '', 'max'       => ''];
+    protected $valueMap = array( 
+        'bar'       => '',
+        'fraction'  => '',
+        'act'       => '',
+        'max'       => '',
+    );
 
     /**
      * Stores the bar utilization.
@@ -89,7 +94,13 @@ class ezcConsoleProgressbar
      * 
      * @var array(string=>int)
      */
-    protected $measures = ['barSpace'          => 0, 'fractionSpace'     => 0, 'actSpace'          => 0, 'maxSpace'          => 0, 'fixedCharSpace'    => 0];
+    protected $measures = array( 
+        'barSpace'          => 0,
+        'fractionSpace'     => 0,
+        'actSpace'          => 0,
+        'maxSpace'          => 0,
+        'fixedCharSpace'    => 0,
+    );
 
     /**
      * The current step the progress bar should show. 
@@ -123,10 +134,11 @@ class ezcConsoleProgressbar
     protected $started = false;
 
     /**
-     * Tool object to perform multi-byte encoding safe string operations.
-     *
+     * Tool object to perform multi-byte encoding safe string operations. 
+     * 
+     * @var ezcConsoleStringTool
      */
-    private readonly \ezcConsoleStringTool $stringTool;
+    private $stringTool;
 
     /**
      * Creates a new progress bar.
@@ -138,7 +150,7 @@ class ezcConsoleProgressbar
      *
      * @see ezcConsoleProgressbar::$options
      */
-    public function __construct( ezcConsoleOutput $outHandler, $max, array $options = [] )
+    public function __construct( ezcConsoleOutput $outHandler, $max, array $options = array() )
     {
         $this->output     = $outHandler;
         $this->stringTool = new ezcConsoleStringTool();
@@ -226,7 +238,7 @@ class ezcConsoleProgressbar
      *         If a desired property value is out of range.
      * @ignore
      */
-    public function __set( $key, mixed $val )
+    public function __set( $key, $val )
     {
         switch ( $key )
         {
@@ -266,12 +278,16 @@ class ezcConsoleProgressbar
      * @return bool True is the property is set, otherwise false.
      * @ignore
      */
-    public function __isset($key)
+    public function __isset( $key )
     {
-        return match ($key) {
-            'options', 'max', 'step' => true,
-            default => false,
-        };
+        switch ( $key )
+        {
+            case 'options':
+            case 'max':
+            case 'step':
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -416,7 +432,7 @@ class ezcConsoleProgressbar
         $bar = $this->properties['options']->formatString;
         foreach ( $this->valueMap as $name => $val )
         {
-            $bar = str_replace( "%{$name}%", $val, (string) $bar );
+            $bar = str_replace( "%{$name}%", $val, $bar );
         }
         return $bar;
     }
@@ -432,16 +448,16 @@ class ezcConsoleProgressbar
         $this->numSteps = ( int ) round( $this->max / $this->properties['options']->step );
         // Calculate measures
         $this->measures['fixedCharSpace'] = iconv_strlen( $this->stripEscapeSequences( $this->insertValues() ), 'UTF-8' );
-        if ( iconv_strpos( (string) $this->properties['options']->formatString, '%max%', 0, 'UTF-8' ) !== false )
+        if ( iconv_strpos( $this->properties['options']->formatString, '%max%', 0, 'UTF-8' ) !== false )
         {
             $this->measures['maxSpace'] = iconv_strlen( sprintf( $this->properties['options']->maxFormat, $this->max ), 'UTF-8' );
 
         }
-        if ( iconv_strpos( (string) $this->properties['options']->formatString, '%act%', 0, 'UTF-8' ) !== false )
+        if ( iconv_strpos( $this->properties['options']->formatString, '%act%', 0, 'UTF-8' ) !== false )
         {
             $this->measures['actSpace'] = iconv_strlen( sprintf( $this->properties['options']->actFormat, $this->max ), 'UTF-8' );
         }
-        if ( iconv_strpos( (string) $this->properties['options']->formatString, '%fraction%', 0, 'UTF-8' ) !== false )
+        if ( iconv_strpos( $this->properties['options']->formatString, '%fraction%', 0, 'UTF-8' ) !== false )
         {
             $this->measures['fractionSpace'] = iconv_strlen( sprintf( $this->properties['options']->fractionFormat, 100 ), 'UTF-8' );
         }
@@ -449,13 +465,14 @@ class ezcConsoleProgressbar
     }
 
     /**
-     * Strip all escape sequences from a string to measure it's size correctly.
-     *
+     * Strip all escape sequences from a string to measure it's size correctly. 
+     * 
+     * @param mixed $str 
      * @return void
      */
-    protected function stripEscapeSequences( mixed $str )
+    protected function stripEscapeSequences( $str )
     {
-        return preg_replace( '/\033\[[0-9a-f;]*m/i', '', (string) $str  );
+        return preg_replace( '/\033\[[0-9a-f;]*m/i', '', $str  );
     }
 }
 ?>
