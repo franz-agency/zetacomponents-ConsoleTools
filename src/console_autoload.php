@@ -25,7 +25,7 @@
  * @package ConsoleTools
  */
 
-return array(
+return [
     'ezcConsoleException'                           => 'ConsoleTools/exceptions/exception.php',
     'ezcConsoleArgumentException'                   => 'ConsoleTools/exceptions/argument.php',
     'ezcConsoleOptionException'                     => 'ConsoleTools/exceptions/option.php',
@@ -88,5 +88,5 @@ return array(
     'ezcConsoleTableCell'                           => 'ConsoleTools/table/cell.php',
     'ezcConsoleTableOptions'                        => 'ConsoleTools/options/table.php',
     'ezcConsoleTableRow'                            => 'ConsoleTools/table/row.php',
-);
+];
 ?>
