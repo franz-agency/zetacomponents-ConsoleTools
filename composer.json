@@ -47,7 +47,8 @@
     "name": "zetacomponents/console-tools",
     "type": "library",
     "require": {
-        "zetacomponents/base": "~1.8"
+        "zetacomponents/base": "~1.8",
+        "ext-iconv": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "~9.0",
