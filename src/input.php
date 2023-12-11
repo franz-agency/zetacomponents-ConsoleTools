@@ -475,7 +475,6 @@ class ezcConsoleInput
      */
     public function getOption( $name )
     {
-        $name = $name;
         if ( isset( $this->optionShort[$name] ) )
         {
             return $this->optionShort[$name];
